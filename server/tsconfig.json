@@ -7,6 +7,6 @@
     "esModuleInterop": true,
     "strict": true
   },
-  "include": ["src", "jest.config.js"],
+  "include": ["src"],
   "exclude": ["build"]
 }
