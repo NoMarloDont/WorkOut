@@ -1,6 +1,7 @@
 import express from 'express';
 import pino from 'pino';
 import pinoHttp from 'pino-http';
+import cors from 'cors';
 
 const PORT = 8000;
 const app = express();
@@ -17,6 +18,7 @@ const httpLogger = pinoHttp({
 });
 
 app.use(httpLogger);
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Hello World');
