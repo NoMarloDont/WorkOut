@@ -1,6 +1,6 @@
-import express from "express";
-import pino from "pino";
-import pinoHttp from "pino-http";
+import express from 'express';
+import pino from 'pino';
+import pinoHttp from 'pino-http';
 
 const PORT = 8000;
 const app = express();
@@ -10,16 +10,16 @@ const httpLogger = pinoHttp({
   logger,
   customLogLevel: function (res, err) {
     if (res.statusCode >= 400 || err) {
-      return "error";
+      return 'error';
     }
-    return "info";
+    return 'info';
   },
 });
 
 app.use(httpLogger);
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
+app.get('/', (req, res) => {
+  res.send('Hello World');
 });
 
 app.listen(PORT, () => {
