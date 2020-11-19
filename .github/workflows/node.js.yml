@@ -37,3 +37,27 @@ jobs:
 
       - name: Unit Tests
         run: yarn test
+
+  server-checks:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: TypeScript Build
+        run: yarn build
+
+      - name: Format Check
+        run: yarn format:check
+
+      - name: Linter Check
+        run: yarn lint
+
+      - name: Unit Tests
+        run: yarn test 
