@@ -27,7 +27,7 @@ export default function App(): React.ReactElement {
   return <div>
       {text == null ? 'Loading' : text}
       <GoogleLogin
-    clientId="812267761968-lvohpt9e9uiudh8s0r9s8n6gciqjqrr5.apps.googleusercontent.com"
+    clientId=""
     buttonText="Login"
     onSuccess={responseGoogle}
     onFailure={responseGoogle}
