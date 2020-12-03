@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build": "webpack --mode production",
-    "start:dev": "webpack serve",
+    "start:dev": "webpack serve --host 0.0.0.0",
     "tsc": "tsc",
     "test": "jest",
     "format:write": "prettier --write ./src",

@@ -1,0 +1,12 @@
+version: "3"
+services:
+  client:
+    build: client
+    command: yarn start:dev
+    ports:
+      - 8080:8080
+  server:
+    build: server 
+    command: yarn start 
+    ports:
+      - 8000:8000
