@@ -1,5 +1,6 @@
-export type LoginRequestPayload = {
-    idToken: string;
-    accessToken: string;
+export type LoginRequestBody = {
+  idToken: string;
+  accessToken: string;
 };
 
+export type LoginResponseBody = unknown;
