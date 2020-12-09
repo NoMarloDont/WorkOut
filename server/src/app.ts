@@ -39,11 +39,9 @@ app.post(
     req: Request<{}, LoginResponseBody, LoginRequestBody>,
     res: Response<LoginResponseBody>,
   ) => {
-    console.log(req);
     const client: OAuth2Client = new OAuth2Client(CLIENT_ID);
 
     try {
-      // check if userId already exists // create if necessary
       await verify(client, req.body.idToken);
       res.send(200);
     } catch (error) {
