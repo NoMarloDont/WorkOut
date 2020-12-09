@@ -8,7 +8,6 @@ RUN yarn install
 
 ADD src /src
 ADD tsconfig.json /
-
-CMD yarn start
+ADD nodemon.json /
 
 EXPOSE 8000

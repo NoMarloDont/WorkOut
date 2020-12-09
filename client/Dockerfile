@@ -10,6 +10,4 @@ ADD src /src
 ADD tsconfig.json /
 ADD webpack.config.js /
 
-CMD yarn start:dev
-
 EXPOSE 8080
