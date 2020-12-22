@@ -7,6 +7,7 @@ ADD package.json /
 RUN yarn install
 
 ADD src /src
+ADD types /types
 ADD tsconfig.json /
 ADD nodemon.json /
 
