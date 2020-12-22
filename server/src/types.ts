@@ -3,4 +3,6 @@ export type LoginRequestBody = {
   accessToken: string;
 };
 
+export type EmptyGetRequestBody = {};
+
 export type LoginResponseBody = unknown;
