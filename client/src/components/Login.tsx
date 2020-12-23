@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Axios from 'axios';
 import {GoogleLoginResponse, GoogleLoginResponseOffline, useGoogleLogin} from 'react-google-login';
 import {Styles} from '../types';
@@ -6,48 +6,41 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {fab} from '@fortawesome/free-brands-svg-icons';
 import {library} from '@fortawesome/fontawesome-svg-core';
 
+const CLIENT_ID = '812267761968-lvohpt9e9uiudh8s0r9s8n6gciqjqrr5.apps.googleusercontent.com';
+const API_URL = 'http://localhost:8000';
+
 library.add(fab);
 
 export default function Login(): React.ReactElement {
-  /* eslint-disable */
-  const [text, setText] = useState<string>();
-  const [response, setResponse] = useState<GoogleLoginResponse>();
-  /* eslint-enable */
+  const [sub, setSub] = useState<string | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
 
   const onSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-    console.log(response);
     if (!('code' in response)) {
-      setResponse(response);
+      const {accessToken, tokenId} = response;
+      Axios.post<string>(API_URL + '/auth', {accessToken, idToken: tokenId}).then(() =>
+        setAccessToken(accessToken),
+      );
     }
   };
 
   const {signIn} = useGoogleLogin({
     onSuccess,
-    isSignedIn: true,
     accessType: 'Offline',
-    clientId: '812267761968-lvohpt9e9uiudh8s0r9s8n6gciqjqrr5.apps.googleusercontent.com',
+    clientId: CLIENT_ID,
   });
 
-  useEffect(() => {
-    Axios.get<string>('http://localhost:8000')
-      .then((response) => setText(response.data))
-      .catch((error) => {
-        setText(JSON.stringify(error));
-        console.error(error);
-      });
-  });
+  function sayHello() {
+    Axios.get<string>(API_URL + '/sub', {
+      headers: {
+        Authorization: accessToken,
+      },
+    })
+      .then((response) => setSub(response.data))
+      .catch((err) => console.error('Failed to say hello', err));
+  }
 
-  const styles: Styles = {
-    loginContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    loginHeader: {},
-    loginText: {},
-  };
-
-  return (
+  return accessToken == null ? (
     <div style={styles.loginContainer}>
       <h1>Welcome to WorkOut</h1>
       <h3>Sign In With Google</h3>
@@ -56,5 +49,20 @@ export default function Login(): React.ReactElement {
         <span className="buttonText"> Sign in with Google</span>
       </button>
     </div>
+  ) : (
+    <div>
+      <button onClick={sayHello}>Say Hello</button>
+      {sub && <div>{`Server Says: "Hello Gooogle User, ${sub}"`}</div>}
+    </div>
   );
 }
+
+const styles: Styles = {
+  loginContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  loginHeader: {},
+  loginText: {},
+};
