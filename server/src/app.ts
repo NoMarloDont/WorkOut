@@ -2,10 +2,9 @@ import express, {Request, Response} from 'express';
 import pino from 'pino';
 import pinoHttp from 'pino-http';
 import cors from 'cors';
-import {EmptyGetRequestBody, LoginRequestBody, LoginResponseBody} from './types';
+import {LoginRequestBody} from './types';
 import {OAuth2Client} from 'google-auth-library';
-import bodyParser from 'body-parser';
-import e from 'express';
+import {endianness} from 'os';
 
 const PORT = 8000;
 const app = express();
@@ -36,8 +35,7 @@ const httpLogger = pinoHttp({
 
 app.use(httpLogger);
 
-const jsonParser = bodyParser.json();
-app.use(jsonParser);
+app.use(express.json());
 
 app.use(cors());
 
@@ -45,41 +43,40 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-app.post(
-  '/auth',
-  async (
-    req: Request<{}, LoginResponseBody, LoginRequestBody>,
-    res: Response<LoginResponseBody>,
-  ) => {
-    const client: OAuth2Client = new OAuth2Client(CLIENT_ID);
-    const {idToken, accessToken} = req.body;
+app.post('/auth', async (req: Request<{}, string, LoginRequestBody>, res: Response<string>) => {
+  const client: OAuth2Client = new OAuth2Client(CLIENT_ID);
+  const {idToken, accessToken} = req.body;
 
-    try {
-      await verify(client, idToken);
-      accessTokenToIdToken.set(accessToken, idToken);
-      res.send(200);
-    } catch (error) {
-      logger.error(error);
-      res.send(401);
-    }
-  },
-);
-
-app.get('/sub', (req: Request<{}, string, {authorization: string}>, res: Response<any>) => {
-  const accessToken = req.body.authorization;
-  const idToken = accessTokenToIdToken.get(accessToken);
-
-  if (!idToken) {
-    res.send(401);
-  } else {
-    const sub = idTokenToSub.get(idToken);
-
-    if (sub) {
-      res.send(sub);
-    } else {
-      res.send(401);
-    }
+  try {
+    await verify(client, idToken);
+    accessTokenToIdToken.set(accessToken, idToken);
+    res.status(200).end();
+  } catch (error) {
+    logger.error(error);
+    res.status(401).end();
   }
+});
+
+app.get('/sub', (req: Request<{}, string, {}>, res: Response<string>) => {
+  const accessToken = req.header('Authorization');
+  if (!accessToken) {
+    res.status(401).end();
+    return;
+  }
+
+  const idToken = accessTokenToIdToken.get(accessToken);
+  if (!idToken) {
+    res.status(401).end();
+    return;
+  }
+
+  const sub = idTokenToSub.get(idToken);
+  if (!sub) {
+    res.status(401).end();
+    return;
+  }
+
+  res.send(sub);
 });
 
 async function verify(client: OAuth2Client, idToken: string): Promise<void> {
