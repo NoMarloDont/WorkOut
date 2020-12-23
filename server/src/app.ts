@@ -4,7 +4,6 @@ import pinoHttp from 'pino-http';
 import cors from 'cors';
 import {LoginRequestBody} from './types';
 import {OAuth2Client} from 'google-auth-library';
-import {endianness} from 'os';
 
 const PORT = 8000;
 const app = express();
