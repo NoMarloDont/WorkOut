@@ -32,3 +32,6 @@ services:
       - type: bind
         source: ./server/node_modules
         target: /node_modules
+      - type: bind
+        source: ./server/types
+        target: /types
