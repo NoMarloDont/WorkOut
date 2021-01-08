@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   client:
     build: client
@@ -16,9 +16,8 @@ services:
         source: ./client/node_modules
         target: /node_modules
 
-
   server:
-    build: server 
+    build: server
     command: yarn watch
     ports:
       - 8000:8000
@@ -35,3 +34,15 @@ services:
       - type: bind
         source: ./server/types
         target: /types
+
+  db:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'password'
+    ports:
+      - 3307:3306
