@@ -1,0 +1,11 @@
+{
+  "dev": {
+    "database": "db",
+    "driver": "mysql",
+    "user": "root",
+    "password": "password",
+    "host": "localhost",
+    "port": "3307",
+    "multipleStatements": true
+  }
+}
