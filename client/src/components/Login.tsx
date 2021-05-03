@@ -5,6 +5,7 @@ import {Styles} from '../types';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {fab} from '@fortawesome/free-brands-svg-icons';
 import {library} from '@fortawesome/fontawesome-svg-core';
+import {css} from '@emotion/css';
 
 const CLIENT_ID = '812267761968-lvohpt9e9uiudh8s0r9s8n6gciqjqrr5.apps.googleusercontent.com';
 const API_URL = 'http://localhost:8000';
@@ -41,7 +42,7 @@ export default function Login(): React.ReactElement {
   }
 
   return accessToken == null ? (
-    <div style={styles.loginContainer}>
+    <div className={styles.loginContainer}>
       <h1>Welcome to WorkOut</h1>
       <h3>Sign In With Google</h3>
       <button onClick={signIn}>
@@ -58,11 +59,11 @@ export default function Login(): React.ReactElement {
 }
 
 const styles: Styles = {
-  loginContainer: {
+  loginContainer: css({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-  },
-  loginHeader: {},
-  loginText: {},
+  }),
+  loginHeader: '',
+  loginText: '',
 };
