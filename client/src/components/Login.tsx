@@ -64,6 +64,4 @@ const styles: Styles = {
     flexDirection: 'column',
     alignItems: 'center',
   }),
-  loginHeader: '',
-  loginText: '',
 };
