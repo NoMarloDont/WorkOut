@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model strengthexercise {
+  exercisename String?
+  id           Int     @id @default(autoincrement())
+}
+
+model users {
+  id        Int    @id @default(autoincrement())
+  google_id String @db.VarChar(255)
+}
