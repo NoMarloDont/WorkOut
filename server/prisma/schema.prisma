@@ -3,13 +3,14 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model strengthexercise {
-  exercisename String?
-  id           Int     @id @default(autoincrement())
+model migrations {
+  id     Int      @id @default(autoincrement())
+  name   String   @db.VarChar(255)
+  run_on DateTime @db.DateTime(0)
 }
 
 model users {

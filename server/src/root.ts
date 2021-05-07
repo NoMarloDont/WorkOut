@@ -25,12 +25,21 @@ root.post('/auth', async (req: Request<{}, string, LoginRequestBody>, res: Respo
     await verify(client, idToken);
     accessTokenToIdToken.set(accessToken, idToken);
     const sub = idTokenToSub.get(idToken) ? idTokenToSub.get(idToken) : null;
+    let googleIdExists = null;
     if (sub) {
-      await prisma.users.create({
-        data: {
+      googleIdExists = await prisma.users.findFirst({
+        where: {
           google_id: sub,
         },
       });
+
+      if (!googleIdExists) {
+        await prisma.users.create({
+          data: {
+            google_id: sub,
+          },
+        });
+      }
     }
     res.status(200).end();
   } catch (error) {
