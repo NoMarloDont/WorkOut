@@ -17,7 +17,7 @@ services:
         target: /node_modules
   server:
     build: server
-    command: yarn watch
+    command: npx prisma introspect && npx prisma generate && yarn watch
     ports:
       - 8000:8000
     volumes:
