@@ -2,6 +2,7 @@ import {Request, Response, Router} from 'express';
 import {OAuth2Client} from 'google-auth-library';
 import {auth} from './auth';
 import {LoginRequestBody} from './types';
+import {PrismaClient} from '@prisma/client';
 
 const CLIENT_ID = '812267761968-lvohpt9e9uiudh8s0r9s8n6gciqjqrr5.apps.googleusercontent.com';
 
@@ -9,6 +10,8 @@ export const idTokenToSub: Map<string, string> = new Map();
 export const accessTokenToIdToken: Map<string, string> = new Map();
 
 export const root = Router();
+
+const prisma = new PrismaClient();
 
 root.get('/', (req, res) => {
   res.send('Hello World');
@@ -21,6 +24,23 @@ root.post('/auth', async (req: Request<{}, string, LoginRequestBody>, res: Respo
   try {
     await verify(client, idToken);
     accessTokenToIdToken.set(accessToken, idToken);
+    const sub = idTokenToSub.get(idToken) ? idTokenToSub.get(idToken) : null;
+    let googleIdExists = null;
+    if (sub) {
+      googleIdExists = await prisma.users.findFirst({
+        where: {
+          google_id: sub,
+        },
+      });
+
+      if (!googleIdExists) {
+        await prisma.users.create({
+          data: {
+            google_id: sub,
+          },
+        });
+      }
+    }
     res.status(200).end();
   } catch (error) {
     req.log.error(error);

@@ -6,7 +6,9 @@
     "format:write": "prettier --write src",
     "format:check": "prettier --check src",
     "lint": "eslint src",
-    "test": "jest"
+    "test": "jest",
+    "prisma:generate": "npx prisma generate",
+    "prisma:introspect": "npx prsima introspect"
   },
   "devDependencies": {
     "@types/cors": "^2.8.8",
@@ -25,11 +27,13 @@
     "typescript": "^4.0.5"
   },
   "dependencies": {
+    "@prisma/client": "^2.22.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "google-auth-library": "^6.1.3",
     "pino": "^6.7.0",
     "pino-http": "^5.3.0",
-    "pino-pretty": "^4.3.0"
+    "pino-pretty": "^4.3.0",
+    "prisma": "^2.22.1"
   }
 }
